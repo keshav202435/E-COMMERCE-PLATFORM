@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: shopwithsingh-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  shopwithsingh:
+    build: .
+    container_name: shopwithsingh-app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/shopwithsingh
+      - JWT_SECRET=yourSuperSecretKey
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
